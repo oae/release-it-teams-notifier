@@ -1,0 +1,39 @@
+{
+  "name": "my-plugin",
+  "version": "0.0.0",
+  "description": "My plugin for release-it",
+  "main": "index.js",
+  "scripts": {
+    "test": "bron test.js",
+    "release": "release-it"
+  },
+  "keywords": [
+    "release",
+    "release-it",
+    "release-it-plugin"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/my/awesome-plugin.git"
+  },
+  "homepage": "https://github.com/my/awesome-plugin#readme",
+  "bugs": "https://github.com/my/awesome-plugin/issues",
+  "author": "",
+  "peerDependencies": {
+    "release-it": "^14.10.0"
+  },
+  "devDependencies": {
+    "bron": "^1.1.1",
+    "release-it": "^14.10.0",
+    "sinon": "^11.1.1"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "release-it": {
+    "hooks": {
+      "before:init": "npm test"
+    }
+  }
+}

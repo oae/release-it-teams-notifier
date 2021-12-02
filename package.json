@@ -1,7 +1,7 @@
 {
-  "name": "my-plugin",
+  "name": "release-it-teams-notifier",
   "version": "0.0.0",
-  "description": "My plugin for release-it",
+  "description": "Microsoft Teams Notifier plugin for release-it",
   "main": "index.js",
   "scripts": {
     "test": "bron test.js",
@@ -15,18 +15,18 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/my/awesome-plugin.git"
+    "url": "https://github.com/oae/release-it-teams-notifier.git"
   },
-  "homepage": "https://github.com/my/awesome-plugin#readme",
-  "bugs": "https://github.com/my/awesome-plugin/issues",
+  "homepage": "https://github.com/oae/release-it-teams-notifier#readme",
+  "bugs": "https://github.com/oae/release-it-teams-notifier/issues",
   "author": "",
   "peerDependencies": {
-    "release-it": "^14.10.0"
+    "release-it": "^14.11.8"
   },
   "devDependencies": {
-    "bron": "^1.1.1",
-    "release-it": "^14.10.0",
-    "sinon": "^11.1.1"
+    "bron": "^2.0.3",
+    "release-it": "^14.11.8",
+    "sinon": "^12.0.1"
   },
   "engines": {
     "node": ">=10"
@@ -35,5 +35,13 @@
     "hooks": {
       "before:init": "npm test"
     }
+  },
+  "dependencies": {
+    "got": "^11.8.3",
+    "gravatar": "^1.8.2",
+    "lodash": "^4.17.21",
+    "mdast-util-to-markdown": "^0.6.5",
+    "remark": "^13.0.0",
+    "semver-parser": "^3.1.1"
   }
 }

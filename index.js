@@ -67,7 +67,7 @@ class TeamsNotifier extends Plugin {
       contributors = (await this.exec(`git show -s --format='{"name": "%cn", "email": "%ce"}' ${latestTag}..${tagName}`)).toString().split(EOL);
     }
 
-    return _.uniqBy(contributors.map(c => JSON.parse(c)), 'email').filter(c => !ignoredContributors.includes(c.name)).map(c => ({
+    return _.uniqBy((contributors || []).map(c => JSON.parse(c)), 'email').filter(c => !ignoredContributors.includes(c.name)).map(c => ({
       ...c,
       avatar: gravatar.url(c.email, {protocol: 'https', s: 24})
     }));

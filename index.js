@@ -14,41 +14,39 @@ const mdOptions = {
 
 class TeamsNotifier extends Plugin {
   async afterRelease() {
-    if (this.isReleased || this.config.isDryRun) {
-      const commitCount = await this.getCommitCount();
-      const contributors = await this.getContributors();
+    const commitCount = await this.getCommitCount();
+    const contributors = await this.getContributors();
 
-      const sections = this.extractSections();
-      const teamsMessage = this.getBaseMessage(commitCount, contributors);
+    const sections = this.extractSections();
+    const teamsMessage = this.getBaseMessage(commitCount, contributors);
 
-      if(contributors.length > 0) {
-        teamsMessage.sections.push({
-          text: contributors.map(c => `![](${c.avatar})`).join(' ')
-        })
-      }
-
-      if(sections.length > 0) {
-        teamsMessage.sections.push({text: '---'})
-      }
-
-      sections.forEach(section => {
-        teamsMessage.sections.push({ text: `## ${section.name}` })
-        teamsMessage.sections.push({ text: section.changes.replace('\n-', '\r-') })
-      })
-
-      const headers = { 'Content-Type': 'application/json' }
-      const body = JSON.stringify(teamsMessage)
-
-      if(this.config.isDryRun) {
-        this.log.log(JSON.stringify(teamsMessage, null, 2))
-        return;
-      }
-
-      await got.post(this.options.webHookUrl, {
-        headers,
-        body,
+    if(contributors.length > 0) {
+      teamsMessage.sections.push({
+        text: contributors.map(c => `![](${c.avatar})`).join(' ')
       })
     }
+
+    if(sections.length > 0) {
+      teamsMessage.sections.push({text: '---'})
+    }
+
+    sections.forEach(section => {
+      teamsMessage.sections.push({ text: `## ${section.name}` })
+      teamsMessage.sections.push({ text: section.changes.replace('\n-', '\r-') })
+    })
+
+    const headers = { 'Content-Type': 'application/json' }
+    const body = JSON.stringify(teamsMessage)
+
+    if(this.config.isDryRun) {
+      this.log.log(JSON.stringify(teamsMessage, null, 2))
+      return;
+    }
+
+    await got.post(this.options.webHookUrl, {
+      headers,
+      body,
+    })
   }
 
   async getCommitCount() {

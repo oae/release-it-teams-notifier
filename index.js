@@ -21,6 +21,12 @@ class TeamsNotifier extends Plugin {
       const sections = this.extractSections();
       const teamsMessage = this.getBaseMessage(commitCount, contributors);
 
+      if(contributors.length > 0) {
+        teamsMessage.sections.push({
+          text: contributors.map(c => `![](${c.avatar})`).join(' ')
+        })
+      }
+
       if(sections.length > 0) {
         teamsMessage.sections.push({text: '---'})
       }
@@ -67,7 +73,12 @@ class TeamsNotifier extends Plugin {
       contributors = (await this.exec(`git show -s --format='{"name": "%cn", "email": "%ce"}' ${latestTag}..${tagName}`)).toString().split(EOL);
     }
 
-    return _.uniqBy((contributors || []).map(c => JSON.parse(c)), 'email').filter(c => !ignoredContributors.includes(c.name)).map(c => ({
+    return _.uniqBy((contributors).map(c => {
+      try {
+        return JSON.parse(c);
+      }
+      catch(e) {}
+    }), 'email').filter(c => !!c).filter(c => !ignoredContributors.includes(c.name)).map(c => ({
       ...c,
       avatar: gravatar.url(c.email, {protocol: 'https', s: 24})
     }));
@@ -137,9 +148,6 @@ class TeamsNotifier extends Plugin {
           activityImage: this.options.imageUrl || 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Gitlab_meaningful_logo.svg/144px-Gitlab_meaningful_logo.svg.png',
           facts,
           markdown: true
-        },
-        {
-          text: contributors.map(c => `![](${c.avatar})`).join(' ')
         }
       ],
     }

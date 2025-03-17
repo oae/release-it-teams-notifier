@@ -43,7 +43,12 @@ class TeamsNotifier extends Plugin {
       return;
     }
 
-    await got.post(this.options.webHookUrl, {
+    const webHookUrl = process.env.RELEASE_IT_CHANGELOG_TEAMS_WEBHOOK_URL || this.options.webHookUrl;
+    if (!webHookUrl) {
+      throw new Error('No webhook URL provided. Set it via RELEASE_IT_CHANGELOG_TEAMS_WEBHOOK_URL environment variable or in the configuration.');
+    }
+
+    await got.post(webHookUrl, {
       headers,
       body,
     })
